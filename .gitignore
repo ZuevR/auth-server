@@ -1,8 +1,8 @@
 # IDE config
-.idea
+/.idea/
 
 # Libraries
-node_modules
+/node_modules/
 
 # Variables
-config
+/config/
