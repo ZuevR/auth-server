@@ -1,0 +1,14 @@
+{
+  "Server": {
+    "port": 3000
+  },
+  "Database": {
+    "username": "postgres",
+    "password": "a483233ce",
+    "database": "auth_server",
+    "host": "127.0.0.1"
+  },
+  "Application": {
+    "secretKey": "default"
+  }
+}
