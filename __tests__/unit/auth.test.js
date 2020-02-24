@@ -32,7 +32,8 @@ describe('Sign up', () => {
     expect.objectContaining({
       firstName: expect.any(String),
       lastName: expect.any(String),
-      email: expect.any(String)
+      email: expect.any(String),
+      updatedAt: expect.any(Date)
     });
     expect(res.body).not.toHaveProperty('password');
   });
@@ -55,6 +56,23 @@ describe('Sign up', () => {
       .send(data);
 
     expect(res.statusCode).toEqual(409);
+  });
+
+});
+
+describe('Confirm registration', () => {
+
+  const data = {
+    userId: 1,
+    confirmationCode: 745513
+  };
+
+  it('should not be expired', async () => {
+    const res = await request(app)
+      .post('/api/v1/auth/confirm')
+      .send(data);
+
+    expect(res.statusCode).toEqual(200);
   });
 
 });

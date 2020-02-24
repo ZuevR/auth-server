@@ -32,6 +32,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER
       },
+      status: {
+        type: Sequelize.SMALLINT,
+        defaultValue: 0
+      },
       createdAt: {
         field: 'created_at',
         allowNull: false,

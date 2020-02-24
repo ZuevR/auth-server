@@ -37,6 +37,9 @@ module.exports = (sequelize, DataTypes) => {
       field: 'verification_code',
       type: DataTypes.INTEGER
     },
+    status: {
+      type: DataTypes.SMALLINT
+    },
     createdAt: {
       field: 'created_at',
       type: DataTypes.DATE
