@@ -1,6 +1,7 @@
 'use strict';
 
 const bcrypt = require('bcrypt');
+
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     firstName: {
@@ -54,7 +55,7 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   User.associate = function (models) {
-    // associations can be defined here
+    User.hasMany(models.Token, { foreignKey: 'userId', as: 'tokens' });
   };
 
   User.beforeValidate(function (model) {
@@ -72,6 +73,10 @@ module.exports = (sequelize, DataTypes) => {
   User.prototype.removeSecretFields = function () {
     delete this.dataValues.password;
     delete this.dataValues.verificationCode;
+  };
+
+  User.prototype.comparePassword = function (password) {
+    return bcrypt.compareSync(password, this.password);
   };
 
   return User;

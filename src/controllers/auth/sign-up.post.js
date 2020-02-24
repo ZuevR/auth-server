@@ -7,8 +7,8 @@ router.post(
   sanitizeFormData,
   async (req, res, next) => {
     try {
-      const userData = req.body;
-      const user = await User.create(userData);
+      const { firstName, lastName, email, password } = req.body;
+      const user = await User.create({ firstName, lastName, email, password });
       user.removeSecretFields();
       res.status(201).json(user);
     } catch (error) {
