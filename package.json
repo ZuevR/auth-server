@@ -18,7 +18,7 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "http://www.github.com"
+    "url": "https://github.com/ZuevR/auth-server"
   },
   "dependencies": {
     "bcrypt": "^3.0.8",
