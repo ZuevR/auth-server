@@ -29,3 +29,6 @@ router.post(
 );
 
 module.exports = router;
+
+// ToDo: add the logic of Refresh Tokens creation together with the device from which the user logs in
+// ToDo: in future use id of user's device to delete certain Refresh Token on logout

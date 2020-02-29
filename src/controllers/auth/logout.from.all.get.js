@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { User, Token } = require('../../models');
+const { Token } = require('../../models');
 const { checkJwtAuthentication } = require('../../middleware/validators');
 
 router.get(
