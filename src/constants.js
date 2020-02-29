@@ -1,4 +1,5 @@
 const verificationCodeLifeTimeMs = 180000;
+const accessTokenLifeTimeS = 300;
 
 const status = {
   candidate: 0,
@@ -7,5 +8,6 @@ const status = {
 
 module.exports = {
   verificationCodeLifeTimeMs,
+  accessTokenLifeTimeS,
   status
 };

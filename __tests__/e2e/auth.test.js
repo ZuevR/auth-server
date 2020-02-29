@@ -1,6 +1,7 @@
 const request = require('supertest');
 const app = require('../../src/app');
 const models = require('../../src/models');
+const { generateAccessToken } = require('../../src/helpers/perform-jwt');
 
 let userData = {};
 
@@ -146,16 +147,49 @@ describe('Refresh', () => {
     expect(res.statusCode).toEqual(404);
   });
 
-  it('should use refresh only one time', async () => {
+  it('should use refresh only once', async () => {
     const firstResponse = await request(app)
       .post('/api/v1/auth/refresh')
       .send({ refreshToken: '3a2d2d37-118f-4d68-bad5-07a7eaf729fd' });
+    expect(firstResponse.statusCode).toEqual(200);
 
     const secondResponse = await request(app)
       .post('/api/v1/auth/refresh')
       .send({ refreshToken: '3a2d2d37-118f-4d68-bad5-07a7eaf729fd' });
 
     expect(secondResponse.statusCode).toEqual(404);
+  });
+
+  it.todo('Multiple refresh tokens are valid');
+
+});
+
+describe('Logout from all devices', () => {
+
+  it('should returns 401 on expired token', async () => {
+    const expiredAccessToken = generateAccessToken({ id: 1 }, '1ms');
+
+    const res = await request(app)
+      .get('/api/v1/auth/logout-from-all')
+      .set({ Authorization: `Bearer ${expiredAccessToken}` });
+
+    expect(res.statusCode).toEqual(401);
+  });
+
+  it('should make refresh token is invalid on logout', async () => {
+    const validAccessToken = generateAccessToken({ id: 2 }, 300);
+
+    const logoutRes = await request(app)
+      .get('/api/v1/auth/logout-from-all')
+      .set({ Authorization: `Bearer ${validAccessToken}` });
+
+    expect(logoutRes.statusCode).toEqual(200);
+
+    const res = await request(app)
+      .post('/api/v1/auth/refresh')
+      .send({ refreshToken: '795f7993-a066-4b8b-9c2e-1a90c1353e52' });
+
+    expect(res.statusCode).toEqual(404);
   });
 });
 

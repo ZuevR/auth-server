@@ -1,8 +1,8 @@
 const router = require('express').Router();
-const jwt = require('jsonwebtoken');
 const uuid = require('uuid/v4');
-const config = require('config');
+const { generateAccessToken } = require('../../helpers/perform-jwt');
 const { Token } = require('../../models');
+const { accessTokenLifeTimeS } = require('../../constants');
 const { throwAppError } = require('../../helpers/error');
 
 router.post(
@@ -20,7 +20,7 @@ router.post(
         { where: { body: token.body, userId: token.userId } }
       );
       res.json({
-        token: jwt.sign({ id: token.userId }, config.get('Application.secretKey')),
+        token: generateAccessToken({ id: token.userId }, accessTokenLifeTimeS),
         refreshToken: newRefreshToken
       })
     } catch (error) {
