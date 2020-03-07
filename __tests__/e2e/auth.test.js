@@ -193,6 +193,25 @@ describe('Logout from all devices', () => {
   });
 });
 
+describe('Logout from one device', () => {
+
+  it('should returns 200 status code', async () => {
+    const loggedInUserData = await request(app)
+      .post('/api/v1/auth/sign-in')
+      .send({
+        email: userData.email,
+        password: userData.password
+      });
+
+    const res = await request(app)
+      .post('/api/v1/auth/logout')
+      .set({ Authorization: `Bearer ${loggedInUserData.body.token}` })
+      .send({ rt: loggedInUserData.body.refreshToken });
+
+    expect(res.statusCode).toEqual(200);
+  });
+});
+
 afterAll(async () => {
   await models.sequelize.close();
 });

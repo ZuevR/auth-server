@@ -17,6 +17,15 @@ router.post(
       const user = await User.findOne({ where: { email } });
       if (!user || !user.comparePassword(password)) throwAppError(403, 'Wrong email or password');
       if (user.status === status.candidate) throwAppError(401, 'User not verified');
+      const allUserTokens = await Token.findAndCountAll({ where: { userId: user.id } });
+      if (allUserTokens.count > 4) {
+        const tokenDates = allUserTokens.rows.map(item => ({
+          body: item.body,
+          time: new Date(item.createdAt).getTime()
+        }));
+        const oldestToken = tokenDates.reduce((acc, cur) => cur.time < acc.time ? cur : acc);
+        await Token.destroy({ where: { body: oldestToken.body } });
+      }
       const refreshToken = await Token.create({ body: uuid(), userId: user.id });
       res.json({
         token: generateAccessToken({ id: user.id }, accessTokenLifeTimeS),
@@ -29,6 +38,3 @@ router.post(
 );
 
 module.exports = router;
-
-// ToDo: add the logic of Refresh Tokens creation together with the device from which the user logs in
-// ToDo: in future use id of user's device to delete certain Refresh Token on logout
