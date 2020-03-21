@@ -10,5 +10,9 @@
   },
   "Application": {
     "secretKey": "default"
+  },
+  "Email": {
+    "login": "example@gmail.com",
+    "password": "password"
   }
 }
