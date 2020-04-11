@@ -17,15 +17,7 @@ router.post(
       const user = await User.findOne({ where: { email } });
       if (!user || !user.comparePassword(password)) throwAppError(403, 'Wrong email or password');
       if (user.status === status.candidate) throwAppError(401, 'User not verified');
-      const allUserTokens = await Token.findAndCountAll({ where: { userId: user.id } });
-      if (allUserTokens.count > 4) {
-        const tokenDates = allUserTokens.rows.map(item => ({
-          body: item.body,
-          time: new Date(item.createdAt).getTime()
-        }));
-        const oldestToken = tokenDates.reduce((acc, cur) => cur.time < acc.time ? cur : acc);
-        await Token.destroy({ where: { body: oldestToken.body } });
-      }
+      await Token.removeTheOldestToken(user.id, 4);
       const refreshToken = await Token.create({ body: uuid(), userId: user.id });
       res.json({
         token: generateAccessToken({ id: user.id }, accessTokenLifeTimeS),

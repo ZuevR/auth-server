@@ -26,5 +26,18 @@ module.exports = (sequelize, DataTypes) => {
   Token.associate = function (models) {
     Token.belongsTo(models.User, { foreignKey: 'userId', as: 'token' });
   };
+
+  Token.removeTheOldestToken = async function (userId, limitNumberOfTokens) {
+    const allUserTokens = await Token.findAndCountAll({ where: { userId } });
+    if (allUserTokens.count > limitNumberOfTokens) {
+      const tokenDates = allUserTokens.rows.map(item => ({
+        body: item.body,
+        time: new Date(item.createdAt).getTime()
+      }));
+      const oldestToken = tokenDates.reduce((acc, cur) => cur.time < acc.time ? cur : acc);
+      await Token.destroy({ where: { body: oldestToken.body } });
+    }
+  };
+
   return Token;
 };
