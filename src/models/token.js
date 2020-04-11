@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
 
   Token.removeTheOldestToken = async function (userId, limitNumberOfTokens) {
     const allUserTokens = await Token.findAndCountAll({ where: { userId } });
-    if (allUserTokens.count > limitNumberOfTokens) {
+    if (allUserTokens.count >= limitNumberOfTokens) {
       const tokenDates = allUserTokens.rows.map(item => ({
         body: item.body,
         time: new Date(item.createdAt).getTime()
