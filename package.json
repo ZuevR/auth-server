@@ -21,7 +21,7 @@
     "url": "https://github.com/ZuevR/auth-server"
   },
   "dependencies": {
-    "bcrypt": "^3.0.8",
+    "bcrypt": "^5.0.0",
     "config": "^3.2.5",
     "debug": "latest",
     "express": "^4.17.1",
