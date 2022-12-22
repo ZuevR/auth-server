@@ -25,7 +25,7 @@
     "config": "^3.2.5",
     "debug": "latest",
     "express": "^4.17.1",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "klaw-sync": "^6.0.0",
     "nodemailer": "^6.4.6",
     "pg": "^7.18.1",
